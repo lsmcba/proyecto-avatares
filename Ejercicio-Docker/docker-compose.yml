@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  backend-avatares:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+     - 80:5000
+    networks:
+      - proyecto-avatares
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    #volumes:
+    #  - ./backend-avatares:/api
+        
+  frontend-avatares:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_HOST=0.0.0.0
+      - VITE_PORT=5173
+    networks:
+      - proyecto-avatares
+    #volumes:
+    #  - ./frontend-avatares:/web
+    depends_on:
+      - backend-avatares
+
+networks:
+  proyecto-avatares:
+    driver: bridge

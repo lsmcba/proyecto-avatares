@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-avatares
+  namespace: proyecto-avatares
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-avatares
+  template:
+    metadata:
+      labels:
+        app: frontend-avatares
+    spec:
+      containers:
+      - name: frontend-avatares
+        image: lsmcba/frontend-avatares:1.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5173
+        env:
+        - name: VITE_HOST
+          value: "0.0.0.0"
+        - name: VITE_PORT
+          value: "5173"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-avatares
+  namespace: proyecto-avatares
+spec:
+  selector:
+    app: frontend-avatares
+  ports:
+    - protocol: TCP
+      port: 5173
+      targetPort: 5173
+  type: NodePort

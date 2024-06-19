@@ -1,0 +1,5 @@
+volume/*
+*.tfstate*
+lib/*
+logs/*
+.terraform/*
