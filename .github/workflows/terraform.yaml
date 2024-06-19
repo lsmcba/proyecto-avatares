@@ -27,14 +27,14 @@ jobs:
       - name: Build and push backend
         uses: docker/build-push-action@v6
         with:
-          context: ./api
+          context: ./Ejercicio-Docker/api
           push: true
           tags: user/backend-avatares:1.0
 
       - name: Build and push frontend
         uses: docker/build-push-action@v6
         with:
-          context: ./web
+          context: ./Ejercicio-Docker/web
           push: true
           tags: user/frontend-avatares:1.0
 
