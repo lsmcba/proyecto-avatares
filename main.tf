@@ -72,7 +72,7 @@ resource "docker_container" "prometheus_container" {
   }
 
   volumes {
-    host_path      = "${path.module}/prometheus.yml"
+    host_path      = abspath("${path.module}/prometheus.yml")
     container_path = "/etc/prometheus/prometheus.yml"
   }
 }
