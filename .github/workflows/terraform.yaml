@@ -29,14 +29,14 @@ jobs:
         with:
           context: ./Ejercicio-Docker/api
           push: true
-          tags: lsmcba/backend-avatares:1.0
+          tags: lsmcba/api:1.0
 
       - name: Build and push frontend
         uses: docker/build-push-action@v6
         with:
           context: ./Ejercicio-Docker/web
           push: true
-          tags: lsmcba/frontend-avatares:1.0
+          tags: lsmcba/web:1.0
 
   scan-security:
     runs-on: ubuntu-latest
@@ -55,10 +55,10 @@ jobs:
           sudo apt-get install -y trivy
 
       - name: Scan backend image
-        run: trivy image lsmcba/backend-avatares:1.0
+        run: trivy image lsmcba/api:1.0
 
       - name: Scan frontend image
-        run: trivy image lsmcba/frontend-avatares:1.0
+        run: trivy image lsmcba/web:1.0
 
   deploy:
     runs-on: ubuntu-latest

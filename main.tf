@@ -22,15 +22,15 @@ terraform {
 provider "docker" {}
 
 resource "docker_image" "backend_image" {
-  name = "lsmcba/backend-avatares:1.0"
+  name = "lsmcba/api:1.0"
 }
 
 resource "docker_container" "backend_container" {
-  name  = "backend-avatares"
+  name  = "api"
   image = docker_image.backend_image.image_id
   ports {
-    internal = 5000
-    external = 5000
+    internal = 80
+    external = 80
   }
 
   env = [
@@ -40,11 +40,11 @@ resource "docker_container" "backend_container" {
 }
 
 resource "docker_image" "frontend_image" {
-  name = "lsmcba/frontend-avatares:1.0"
+  name = "lsmcba/web:1.0"
 }
 
 resource "docker_container" "frontend_container" {
-  name  = "frontend-avatares"
+  name  = "web"
   image = docker_image.frontend_image.image_id
   ports {
     internal = 5173
