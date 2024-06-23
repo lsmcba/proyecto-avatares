@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-avatares
+  name: web
   namespace: proyecto-avatares
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: frontend-avatares
+      app: web
   template:
     metadata:
       labels:
-        app: frontend-avatares
+        app: web
     spec:
       containers:
-      - name: frontend-avatares
-        image: lsmcba/frontend-avatares:1.0
+      - name: web
+        image: lsmcba/web:1.0
         resources:
           limits:
             memory: "128Mi"
@@ -33,11 +33,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-avatares
+  name: web
   namespace: proyecto-avatares
 spec:
   selector:
-    app: frontend-avatares
+    app: web
   ports:
     - protocol: TCP
       port: 5173

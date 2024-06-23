@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-avatares
+  name: api
   namespace: proyecto-avatares
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: backend-avatares
+      app: api
   template:
     metadata:
       labels:
-        app: backend-avatares
+        app: api
     spec:
       containers:
-      - name: backend-avatares
-        image: lsmcba/backend-avatares:1.0
+      - name: api
+        image: lsmcba/api:1.0
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 5000
+        - containerPort: 80
         env:
         - name: FLASK_APP
           value: "app.py"
@@ -33,12 +33,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-avatares
+  name: api
   namespace: proyecto-avatares
 spec:
   selector:
-    app: backend-avatares
+    app: api
   ports:
     - protocol: TCP
-      port: 5000
-      targetPort: 5000
+      port: 80
+      targetPort: 80
