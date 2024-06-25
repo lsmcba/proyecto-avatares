@@ -102,6 +102,12 @@ jobs:
       - name: List Docker Containers
         run: docker ps
 
+      - name: Test API Connection
+        run: curl -v http://localhost:80
+
+      - name: Test Web Connection
+        run: curl -v http://localhost:5173
+      
       - name: Test Prometheus Connection
         run: curl -v http://localhost:9090
 
