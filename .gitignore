@@ -3,3 +3,4 @@ volume/*
 lib/*
 logs/*
 .terraform/*
+.terraform.lock.hcl
