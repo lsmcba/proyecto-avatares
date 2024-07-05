@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus
+  namespace: proyecto-avatares
   labels:
     app: prometheus
-    namespace: proyecto-avatares
 spec:
   replicas: 1
   selector:
@@ -20,24 +20,48 @@ spec:
         image: prom/prometheus:latest
         ports:
         - containerPort: 9090
+        args:
+          - "--config.file=/etc/prometheus/prometheus.yml"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
         volumeMounts:
-        - name: prometheus-storage
-          mountPath: /prometheus
         - name: prometheus-config
-          mountPath: /etc/prometheus/prometheus.yml
-          subPath: prometheus.yml
+          mountPath: /etc/prometheus
       volumes:
-      - name: prometheus-storage
-        persistentVolumeClaim:
-          claimName: prometheus-pvc
       - name: prometheus-config
         configMap:
-          name: prometheus-config
+          name: prometheus-configuracion
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-configuracion
+  namespace: proyecto-avatares
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+      - job_name: 'api'
+        static_configs:
+          - targets: ['api:80']
+      - job_name: 'web'
+        static_configs:
+          - targets: ['web:5173']
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: prometheus
+  namespace: proyecto-avatares
   labels:
     app: prometheus
 spec:
