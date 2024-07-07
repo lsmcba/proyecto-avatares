@@ -89,3 +89,17 @@ resource "docker_container" "grafana" {
     external = 3000
   }
 }
+
+resource "docker_image" "kube-state-metrics" {
+  name = "bitnami/kube-state-metrics:latest"
+}
+
+resource "docker_container" "kube-state-metrics" {
+  name  = "kube-state-metrics"
+  image = docker_image.kube-state-metrics.image_id
+
+  ports {
+    internal = 9100
+    external = 9100
+  }
+}

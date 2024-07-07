@@ -1,6 +1,8 @@
-volume/*
+Localstack/volume/*
 *.tfstate*
 lib/*
 logs/*
 .terraform/*
 .terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup

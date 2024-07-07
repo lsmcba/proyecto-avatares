@@ -35,31 +35,30 @@ spec:
       volumes:
       - name: prometheus-config
         configMap:
-          name: prometheus-config-inline
+          name: prometheus-configuracion
+
 ---
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prometheus-config-inline
+  name: prometheus-configuracion
   namespace: proyecto-avatares
 data:
   prometheus.yml: |
     global:
       scrape_interval: 15s
     scrape_configs:
-      - job_name: 'prometheus'
+      - job_name: 'kube-state-metrics'
+        honor_timestamps: true
+        metrics_path: /metrics
+        scheme: http
         static_configs:
-          - targets: ['localhost:30090']
-      - job_name: 'api'
-        static_configs:
-          - targets: ['api:30080']
-      - job_name: 'web'
-        static_configs:
-          - targets: ['web:30173']
-      - job_name: 'node-exporter'
-        static_configs:
-          - targets: ['node-exporter:9100']
-
+          - targets: ['192.168.49.2:31081']
+        metric_relabel_configs:
+          - target_label: cluster
+            replacement: prometheus
+            
 ---
 apiVersion: v1
 kind: Service

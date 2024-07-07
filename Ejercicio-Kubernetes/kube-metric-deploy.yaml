@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-state-metrics
+  namespace: proyecto-avatares
+  labels:
+    app: kube-state-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-state-metrics
+  template:
+    metadata:
+      labels:
+        app: kube-state-metrics
+    spec:
+      containers:
+      - name: kube-state-metrics
+        image: bitnami/kube-state-metrics:latest
+        ports:
+        - containerPort: 8081
+        resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+              cpu: 100m
+        args:
+        - --resources=pods
+        - --node=""
+          
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-state-metrics
+  namespace: proyecto-avatares
+  labels:
+    app: kube-state-metrics
+spec:
+  type: NodePort
+  ports:
+  - name: telemetry
+    port: 8081
+    targetPort: 8081
+    nodePort: 31081
+  selector:
+    app: kube-state-metrics
