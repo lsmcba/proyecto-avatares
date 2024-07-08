@@ -21,6 +21,7 @@ terraform {
 
 provider "docker" {}
 
+
 resource "docker_image" "api" {
   name = "lsmcba/api:1.0"
 }
@@ -38,6 +39,7 @@ resource "docker_container" "api" {
     "FLASK_ENV=development"
   ]
 }
+
 
 resource "docker_image" "web" {
   name = "lsmcba/web:1.0"
@@ -57,4 +59,49 @@ resource "docker_container" "web" {
   ]
 
   depends_on = [docker_container.api]
+}
+
+resource "docker_image" "prometheus" {
+  name = "prom/prometheus:latest"
+}
+
+resource "docker_container" "prometheus" {
+  name  = "prometheus"
+  image = docker_image.prometheus.image_id
+  ports {
+    internal = 9090
+    external = 9090
+  }
+
+  volumes {
+    host_path      = "${abspath(path.module)}/prometheus.yml"
+    container_path = "/etc/prometheus/prometheus.yml"
+  }
+}
+
+resource "docker_image" "grafana" {
+  name = "grafana/grafana:latest"
+}
+
+resource "docker_container" "grafana" {
+  name  = "grafana"
+  image = docker_image.grafana.image_id
+  ports {
+    internal = 3000
+    external = 3000
+  }
+}
+
+resource "docker_image" "kube-state-metrics" {
+  name = "bitnami/kube-state-metrics:latest"
+}
+
+resource "docker_container" "kube-state-metrics" {
+  name  = "kube-state-metrics"
+  image = docker_image.kube-state-metrics.image_id
+
+  ports {
+    internal = 8081
+    external = 8081
+  }
 }
