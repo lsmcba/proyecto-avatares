@@ -73,7 +73,6 @@ metadata:
   name: kube-state-metrics
   namespace: proyecto-avatares
 spec:
-  #clusterIP: None
   type: NodePort
   ports:
   - name: http-metrics
